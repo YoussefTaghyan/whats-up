@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Question 👀</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+    height: 540px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    position: relative; /* مهم عشان الفيديو يتمدد جوه الكارت */
+    overflow: hidden;
+}
+
+.image-box {
+    width: 100%;
+    height: 180px;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+button {
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    transition: left 0.15s, top 0.15s;
+    z-index: 2; /* الأزرار تحت الفيديو لما يظهر */
+}
+
+/* YES */
+#yes {
+    background: #ff4d6d;
+    color: white;
+    left: 20px;
+    bottom: 20px;
+}
+
+/* NO */
+#no {
+    background: #ccc;
+    right: 20px;
+    bottom: 20px;
+}
+
+/* hearts */
+.heart {
+    position: absolute;
+    font-size: 22px;
+    animation: float 2s linear forwards;
+    pointer-events: none;
+    z-index: 3;
+}
+
+@keyframes float {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-150px); }
+}
+
+/* الفيديو يغطي الكارت بالكامل */
+#loveVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    visibility: hidden;
+    z-index: 5; /* فوق كل العناصر */
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <div class="image-box">
+        <img src="shutterstock_350254424.jpg" alt="">
+    </div>
+
+    <h2>هتجيبى رقم الواتس  لا ؟؟</h2>
+
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+
+    <!-- الفيديو يغطي الكارت بالكامل -->
+    <video id="loveVideo" controls>
+        <source src="video6050699546638426602.mp4" type="video/mp4">
+        متأسف، المتصفح بتاعك مش بيدعم تشغيل الفيديو.
+    </video>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const card = document.getElementById("card");
+const video = document.getElementById("loveVideo");
+
+let lastMove = 0;
+
+card.addEventListener("mousemove", (e) => {
+    const btnRect = noBtn.getBoundingClientRect();
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
+    const distance = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+
+    const now = Date.now();
+    if (distance < 180 && now - lastMove > 300) {
+        moveNoInsideCard();
+        lastMove = now;
+    }
+});
+
+function moveNoInsideCard() {
+    const padding = 10;
+    const maxX = card.clientWidth - noBtn.offsetWidth - padding;
+    const maxY = card.clientHeight - noBtn.offsetHeight - padding;
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+}
+
+// YES effect + تشغيل الفيديو
+yesBtn.addEventListener("click", () => {
+    for (let i = 0; i < 40; i++) {
+        createHeart();
+    }
+
+    // إظهار الفيديو بحجم الكارت بالكامل
+    video.style.visibility = "visible";
+    video.play();
+});
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = Math.random() * window.innerHeight + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
